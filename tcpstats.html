@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html ng-app="MainApp">
+	<head>
+		<title>TCPStats</title>
+		<meta charset="utf-8" />
+		<meta name="author" content="Jakub Šoustar" />
+
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet" type="text/css">
+		<link href="style.css" rel="stylesheet" type="text/css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js" type="text/javascript"></script>
+		<script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>
+		<script src="log/dump.js" type="text/javascript"></script>
+		<script src="app.js" type="text/javascript"></script>
+	</head>
+	<body ng-controller="MainController">
+		<h1>TCPStats</h1>
+
+		<div class="tabs">
+			<span class="tab" ng-class="{selected: tab == summary.key}" ng-click="tab = summary.key">
+				{{summary.title}}
+			</span>
+
+			<span class="tab" ng-repeat="stat in stats" ng-class="{selected: $parent.tab == stat.key}" ng-click="$parent.tab = stat.key">
+				{{stat.title}}
+			</span>
+
+			<span class="tab" ng-class="{selected: tab == about.key}" ng-click="tab = about.key">
+				{{about.title}}
+			</span>
+		</div>
+
+		<div class="container" ng-show="tab == summary.key">
+			<h2>Capture Summary</h2>
+			<table class="summary">
+				<tr>
+					<th>First Packet</th>
+					<th>Last Packet</th>
+					<th>Elapsed</th>
+				</tr>
+				<tr>
+					<td>{{summary.data.start | date : "yyyy-MM-dd HH:mm:ss.sss"}}</td>
+					<td>{{summary.data.end | date : "yyyy-MM-dd HH:mm:ss.sss"}}</td>
+					<td>{{(summary.data.end - summary.data.start) / 1000 | number : 3}} s</td>
+				</tr>
+			</table>
+
+			<h2>Transfer Summary</h2>
+			<table class="summary">
+				<tr>
+					<th></th>
+					<th>Sender ({{summary.data.parties.sender.ip}})</th>
+					<th>Receiver ({{summary.data.parties.receiver.ip}})</th>
+					<th>Total</th>
+				</tr>
+				<tr>
+					<th>Packets Sent</th>
+					<td>{{summary.data.parties.receiver.packets}}</td>
+					<td>{{summary.data.parties.sender.packets}}</td>
+					<td>{{summary.data.packets}}</td>
+				</tr>
+				<tr>
+					<th>Bytes Sent</th>
+					<td>{{summary.data.parties.receiver.bytes | bytes}}</td>
+					<td>{{summary.data.parties.sender.bytes | bytes}}</td>
+					<td>{{summary.data.bytes | bytes}}</td>
+				</tr>
+			</table>
+
+			<h2>TCP Options Summary</h2>
+			<table class="summary">
+				<tr>
+					<th>Option</th>
+					<th>Sender ({{summary.data.parties.sender.ip}})</th>
+					<th>Receiver ({{summary.data.parties.receiver.ip}})</th>
+				</tr>
+				<tr ng-repeat="option in summary.data.options">
+					<td>{{option}}</td>
+					<td ng-init="used = summary.data.parties.receiver.options.indexOf(option) != -1">
+						<span title="{{used ? 'Used' : 'Not Used'}}">{{used ? "✔" : "✘"}}</span>
+					</td>
+					<td ng-init="used = summary.data.parties.sender.options.indexOf(option) != -1">
+						<span title="{{used ? 'Used' : 'Not Used'}}">{{used ? "✔" : "✘"}}</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="container" ng-repeat="stat in stats" ng-show="$parent.tab == stat.key" ng-init="merge = false">
+			<div>
+				<input id="merge-{{stat.key}}" class="merge clear" type="checkbox" ng-model="merge" />
+				<label for="merge-{{stat.key}}">Single Chart</label>
+			</div>
+
+			<div class="stat small left" tcp-stat party="'sender'" options="stat" ng-show="!merge"></div>
+			<div class="stat small right" tcp-stat party="'receiver'" options="stat" ng-show="!merge"></div>
+			<div class="stat big center" tcp-stat options="stat" ng-show="merge"></div>
+		</div>
+
+		<div class="container about" ng-show="tab == about.key">
+			<h2>About</h2>
+			<p>
+				TCPStats can collect and present various statistics about a single TCP stream.
+			</p>
+
+			<h2>Collecting</h2>
+			<p>
+				Data collecting is done by the <code>tcpstats</code> script written for Python 2.7.
+				Scapy library is used to analyze TCP packets. Supports captures in the PCAP format.
+				Collected statistics are saved to
+				<code>log/dump.js</code> file which is then presented by this web page.
+			</p>
+
+			<h2>Presentation</h2>
+			<p>
+				Collected statistics are presented via summary tables and several charts. This web page
+				is written in HTML, CSS and JavaScript. Internet connection is required in order for the
+				application to load used libraries and fonts. In addition to mentioned technologies,
+				the following JavaScript libraries are used:
+				<ul>
+					<li>Highcharts 4.2.4</li>
+					<li>AngularJS 1.4.9</li>
+				</ul>
+			</p>
+
+			<h3>Charts</h3>
+			<p>
+				All charts have enabled zooming (drag out a rectangle around the area you wish to zoom)
+				and panning (shift and drag). You can also use the 'Single Chart' toggle to display
+				two separate charts or a single one.
+			</p>
+		</div>
+	</body>
+</html>

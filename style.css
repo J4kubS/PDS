@@ -1,0 +1,170 @@
+/*
+ * Project : TCPStats
+ * Author  : Jakub Šoustar <jakub.soustar@gmail.com> <xsoust02@stud.fit.vutbr.cz>
+*/
+
+* {
+	font-family: "Ubuntu", sans-serif;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+h1 {
+	text-align: center;
+	background: #222;
+	padding: 1.3rem;
+	color: #FFF;
+}
+
+code {
+	font-family: 'Ubuntu Mono', sans-serif;
+}
+
+.tabs {
+	text-align: center;
+	font-size: 1.2rem;
+	margin: 2.5rem 0;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tab {
+	border-radius: 3px;
+	background: #CCC;
+	padding: 1rem;
+	margin: 0 0.2rem;
+	cursor: pointer;
+}
+
+.selected {
+	background: #4CAF50;
+	color: #FFF;
+}
+
+.summary {
+	margin: 0 auto;
+	margin-bottom: 3.5rem;
+	margin-top: 0.5rem;
+	border-collapse: collapse;
+}
+
+.summary tr:first-child {
+	background: #4CAF50;
+	color: #FFF;
+}
+
+.summary tr:first-child th:first-child, .summary tr:first-child td:first-child {
+	border-top-left-radius: 3px;
+}
+
+.summary tr:first-child th:last-child, .summary tr:first-child td:last-child {
+	border-top-right-radius: 3px;
+}
+
+.summary tr:last-child th:first-child, .summary tr:last-child td:first-child {
+	border-bottom-left-radius: 3px;
+}
+
+.summary tr:last-child th:last-child, .summary tr:last-child td:last-child {
+	border-bottom-right-radius: 3px;
+}
+
+.summary tr:nth-child(2n+2) {
+	background: #EEE;
+}
+
+.summary tr:nth-child(2n+3) {
+	background: #CCC;
+}
+
+.summary td, .summary th {
+	padding: 0.5rem 1rem;
+}
+
+.container {
+	text-align: center;
+	margin: 0 auto;
+	height: 80%;
+	width: 75%;
+}
+
+.about {
+	text-align: center;
+	width: 40%;
+}
+
+.about h2, .about h3 {
+	margin-bottom: 0.5rem;
+	margin-top: 2rem;
+}
+
+.about ul {
+	list-style-type: none;
+	margin-top: 1rem;
+}
+
+.about p {
+	text-align: justify;
+}
+
+.stat {
+	position: relative;
+	margin: 5rem 2% 2rem 2%;
+	height: 80%;
+}
+
+.small {
+	width: 46%;
+}
+
+.big {
+	width: 100%;
+}
+
+.center {
+	margin: inherit auto;
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
+}
+
+.clear {
+	clear: both;
+}
+
+.merge {
+	display: none;
+}
+
+.merge + label:before {
+	display: inline-block;
+	content: "";
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	border: 2px solid #000;
+	border-radius: 3px;
+	text-align: center;
+	margin-right: 5px;
+}
+
+.merge:checked + label:before {
+	box-shadow: inset 0 0 0 2px #FFF;
+	border-radius: 3px;
+	background: #4CAF50;
+}
